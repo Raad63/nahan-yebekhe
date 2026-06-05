@@ -1125,7 +1125,7 @@ function getDashboardUI(hasDB) {
                   let proto = document.getElementById('cfg-proto').value === 'beta' ? String.fromCharCode(116, 114, 111, 106, 97, 110) : String.fromCharCode(118, 108, 101, 115, 115);
                   let rawIps = document.getElementById('cfg-ips').value || "";
                   
-                  let ipsList = rawIps.replace(/,/g, '\\\\n').replace(/;/g, '\\\\n').split('\\\\n').map(s=>s.trim()).filter(Boolean);
+                  let ipsList = rawIps.replace(/,/g, '\\n').replace(/;/g, '\\n').split('\\n').map(s=>s.trim()).filter(Boolean);
                   let finalIP = ipsList.length > 0 ? ipsList[0] : (hostName.endsWith('.pages.dev') ? 'time.is' : hostName);
                   
                   let fp = document.getElementById('cfg-fp').value;
@@ -1136,8 +1136,12 @@ function getDashboardUI(hasDB) {
                   if (document.getElementById('cfg-ech').checked) rawLink += "&pbk=enabled";
                   rawLink += "#" + hostName;
   
-                  document.getElementById('link-direct').value = rawLink;
-                  document.getElementById('qr-code').src = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" + encodeURIComponent(rawLink);
+                  // FIX: Check if elements exist before accessing properties
+                  const linkEl = document.getElementById('link-direct');
+                  if (linkEl) linkEl.value = rawLink;
+  
+                  const qrEl = document.getElementById('qr-code');
+                  if (qrEl) qrEl.src = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" + encodeURIComponent(rawLink);
   
                   let totalIps = ipsList.length === 0 ? 1 : ipsList.length;
                   let tCfg = totalIps * 2; 
